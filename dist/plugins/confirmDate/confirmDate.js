@@ -22,7 +22,10 @@
             if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
               e.preventDefault();
               confirmContainer.focus();
-            } else if (e.key === "Enter" && e.target === confirmContainer) fp.close();
+            } else if (e.key === "Enter" && e.target === confirmContainer) {
+              fp.input.focus();
+              fp.close();
+            }
           },
           onReady: function onReady() {
             confirmContainer = fp._createElement("div", "flatpickr-confirm " + (config.showAlways ? "visible" : "") + " " + config.theme + "Theme", config.confirmText);
