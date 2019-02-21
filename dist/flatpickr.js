@@ -1398,11 +1398,11 @@
 
             case 9:
               if (!isTimeObj) {
-                self.element.focus();
+                focusAndClose();
                 break;
               }
 
-              var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM].filter(function (x) {
+              var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM, self.calendarContainer.querySelector('.flatpickr-confirm')].filter(function (x) {
                 return x;
               });
               var i = elems.indexOf(e.target);
@@ -1414,7 +1414,7 @@
                   e.preventDefault();
                   target.focus();
                 } else {
-                  self.element.focus();
+                  focusAndClose();
                 }
               }
 
