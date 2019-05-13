@@ -16,7 +16,7 @@
       var config = Object.assign({}, defaultConfig, pluginConfig);
       var confirmContainer;
       return function (fp) {
-        if (fp.config.noCalendar || fp.isMobile) return {};
+        if (fp.isMobile) return {};
         return Object.assign({
           onKeyDown: function onKeyDown(_, __, ___, e) {
             if (fp.config.enableTime && e.key === "Tab" && e.target === fp.amPM) {
