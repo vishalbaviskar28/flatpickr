@@ -1398,7 +1398,7 @@
 
             case 9:
               if (!isTimeObj) {
-                focusAndClose();
+                focusAndClose(self.config.confirmTime);
                 break;
               }
 
@@ -1414,7 +1414,7 @@
                   e.preventDefault();
                   target.focus();
                 } else {
-                  focusAndClose();
+                  focusAndClose(self.config.confirmTime);
                 }
               }
 
@@ -1729,6 +1729,10 @@
 
       function focusAndClose() {
         self._input.focus();
+
+        if (close) {
+          self.clear(true);
+        }
 
         if (window.navigator.userAgent.indexOf("MSIE") !== -1 || navigator.msMaxTouchPoints !== undefined) {
           setTimeout(self.close, 0);
