@@ -1727,7 +1727,7 @@
         buildDays();
       }
 
-      function focusAndClose() {
+      function focusAndClose(close) {
         self._input.focus();
 
         if (window.navigator.userAgent.indexOf("MSIE") !== -1 || navigator.msMaxTouchPoints !== undefined) {
