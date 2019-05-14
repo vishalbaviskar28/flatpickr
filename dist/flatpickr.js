@@ -1729,7 +1729,7 @@
         buildDays();
       }
 
-      function focusAndClose() {
+      function focusAndClose(close) {
         self._input.focus();
 
         if (close) {
