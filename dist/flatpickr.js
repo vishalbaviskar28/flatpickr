@@ -1539,6 +1539,11 @@
 
           self._input.classList.add("active");
 
+          var _hasSelectedDate = self.selectedDates.length;
+          if (!_hasSelectedDate && !self.config.noCalendar) {
+            self.todayDateElem.focus();
+          }
+
           triggerEvent("onOpen");
           positionCalendar(positionElement);
         }

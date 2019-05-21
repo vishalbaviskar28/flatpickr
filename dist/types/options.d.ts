@@ -19,6 +19,7 @@ export interface BaseOptions {
     appendTo: HTMLElement;
     ariaDateFormat: string;
     clickOpens: boolean;
+    closedOnFocus: boolean;
     closeOnSelect: boolean;
     conjunction: string;
     dateFormat: string;
