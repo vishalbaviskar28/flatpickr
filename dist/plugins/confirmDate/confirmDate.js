@@ -31,7 +31,10 @@
             confirmContainer = fp._createElement("div", "flatpickr-confirm " + (config.showAlways ? "visible" : "") + " " + config.theme + "Theme", config.confirmText);
             confirmContainer.tabIndex = -1;
             confirmContainer.innerHTML += config.confirmIcon;
-            confirmContainer.addEventListener("click", fp.close);
+            confirmContainer.addEventListener("click", function() {
+              fp.input.focus();
+              fp.close();
+            });
             fp.calendarContainer.appendChild(confirmContainer);
           }
         }, !config.showAlways ? {
