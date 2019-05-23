@@ -1201,6 +1201,7 @@
           self._input.classList.remove("active");
         }
 
+        triggerEvent("onChange");
         triggerEvent("onClose");
       }
 
