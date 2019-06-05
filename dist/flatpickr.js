@@ -1542,11 +1542,7 @@
 
           var _hasSelectedDate = self.selectedDates.length;
           if (!_hasSelectedDate && !self.config.noCalendar && self.todayDateElem) {
-            if (window.navigator.userAgent.indexOf("Edge") !== -1) {
-              setTimeout(function(){self.todayDateElem.focus()}, 0);
-            } else {
-              self.todayDateElem.focus();
-            }
+            setTimeout(function(){self.todayDateElem.focus()}, 0);
           }
 
           triggerEvent("onOpen");
