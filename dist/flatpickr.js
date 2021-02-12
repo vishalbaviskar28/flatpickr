@@ -1330,12 +1330,40 @@
         var allowKeydown = self.isOpen && (!allowInput || !isInput);
         var allowInlineKeydown = self.config.inline && isInput && !allowInput;
 
+        // get target element for the webcomponents
+        function getTargetElement(event) {
+          if (event.path && event.path.length > 0) {
+            // Chrome, Edge Beta
+            return event.path[0];
+          }
+          if (event.originalTarget) {
+            // Firefox
+            return event.originalTarget;
+          }
+          if (event.composedPath && event.composedPath().length > 0) {
+            // Safari
+            return event.composedPath()[0];
+          }
+          // No shadow DOM
+          if (event.srcElement) {
+            // Edge
+            return event.srcElement;
+          }
+          // Standard
+          return event.target;
+        }
+
+        // adds additional property
+        var focusedOnAdditionalContainer = !!self.config.additionalFocusContainer && (self.config.additionalFocusContainer.contains(e.target) || e.detail && e.detail.currentTarget === self.config.additionalFocusContainer || getTargetElement(e) === self.config.additionalFocusContainer);
+
         if (e.keyCode === 13 && isInput) {
           if (allowInput) {
             self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
             return e.target.blur();
           } else self.open();
-        } else if (isCalendarElem(e.target) || allowKeydown || allowInlineKeydown) {
+          // adds additional property to prevent closing input
+        } else if (isCalendarElem(e.target) || allowKeydown || allowInlineKeydown || focusedOnAdditionalContainer) {
+
           var isTimeObj = !!self.timeContainer && self.timeContainer.contains(e.target);
 
           switch (e.keyCode) {
@@ -1400,11 +1428,11 @@
               break;
 
             case 9:
-              if (!isTimeObj) {
+              // tabing from input when using material input - prevent from closing
+              if (!isTimeObj && !focusedOnAdditionalContainer || (focusedOnAdditionalContainer && e.shiftKey)) {
                 focusAndClose(self.config.confirmTime);
                 break;
               }
-
               var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM, self.calendarContainer.querySelector('.flatpickr-confirm')].filter(function (x) {
                 return x;
               });
@@ -1412,13 +1440,20 @@
 
               if (i !== -1) {
                 var target = elems[i + (e.shiftKey ? -1 : 1)];
-
                 if (target !== undefined) {
                   e.preventDefault();
                   target.focus();
                 } else {
                   focusAndClose(self.config.confirmTime);
                 }
+              }
+
+              // prevent closing when focus goes from the material input, 
+              // select hour element instead
+              if (focusedOnAdditionalContainer) {
+                setTimeout(() => {
+                  self.hourElement && self.hourElement.select();
+                }, 50);
               }
 
               break;
@@ -1559,7 +1594,7 @@
           if (self.config.allowInput === false && (e === undefined || !self.timeContainer.contains(e.relatedTarget))) {
             setTimeout(function () {
               return self.hourElement.select();
-            }, 50);
+            }, 50);  
           }
         }
       }
@@ -1943,7 +1978,8 @@
           if (!self.config.static && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
         }
 
-        if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
+        // if self.config.additionalFocusContainer always have read-only
+        if (!self.config.allowInput || self.config.additionalFocusContainer) self._input.setAttribute("readonly", "readonly");
         self._positionElement = self.config.positionElement || self._input;
       }
 
